@@ -1,0 +1,36 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual Environment
+.venv/
+venv/
+env/
+ENV/
+bin/
+lib/
+include/
+
+# Data & CSV (Penting jika ticker.csv atau data download hanya untuk lokal)
+*.csv
+*.xlsx
+*.json
+# Kecuali jika kamu ingin menyimpan template ticker.csv di git:
+!ticker.csv
+
+# IDE / Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Project specific
+.DS_Store
+logs/
+results/
+
+# Distribution / Packaging
+dist/
+build/
+*.egg-info/

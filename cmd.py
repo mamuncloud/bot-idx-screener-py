@@ -89,7 +89,9 @@ class Command:
 
         # --- Bagian Pengiriman Notifikasi ---
         if self.notifier:
-          self.notifier.send_notification(strategy, matches)
+            if matches:
+                matches.sort(key=lambda x: x['value'], reverse=True)
+            self.notifier.send_notification(strategy, matches)
         
 
         print(f"\nFINISHED: Found {len(matches)} stocks.")

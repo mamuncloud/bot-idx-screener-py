@@ -1,5 +1,3 @@
-import yfinance as yf
-
 class StockScreener:
     def __init__(self):
       return
@@ -159,6 +157,46 @@ class StockScreener:
         and breakout
       )
 
+    def is_before_rising_three_method_with_volume(self, df):
+      """
+      Strategi Antisipasi dengan Konfirmasi Volume:
+      1. C1 Bullish kuat (> 4%) + Volume Tinggi
+      2. C2, C3, C4 berada di dalam range High/Low C1
+      3. C2 Bearish, C3 Bearish, C4 Bearish (Color Red)
+      4. Volume C2, C3, C4 menunjukkan tren menurun (Dying Volume)
+      """
+      if len(df) < 4: return False
+      
+      c = df.tail(4)
+      
+      # 1. Validasi Candle 1 (Bullish & Base High/Low)
+      c1_bullish = c.iloc[0]['Close'] > c.iloc[0]['Open'] * 1.06
+      c1_high = c.iloc[0]['High']
+      c1_low = c.iloc[0]['Low']
+      
+      # 2. Validasi Middle Candles (Stay inside, Bearish & Volume weakening)
+      middle_stayed_inside = (
+        c.iloc[1]['Close'] < c1_high 
+        and c.iloc[1]['Close'] > c1_low
+
+        and c.iloc[2]['Close'] < c1_high 
+        and c.iloc[2]['Close'] > c1_low
+
+        and c.iloc[3]['Close'] < c1_high 
+        and c.iloc[3]['Close'] > c1_low
+      )
+      middle_is_bearish = (
+        c.iloc[1]['Close'] < c.iloc[1]['Open']
+        and c.iloc[2]['Close'] < c.iloc[2]['Open']
+        and c.iloc[3]['Close'] < c.iloc[3]['Open']
+      )
+
+      return (
+          c1_bullish 
+          and middle_stayed_inside 
+          and middle_is_bearish
+      )
+    
     def is_bb_breakout_volume(self, df):
       """
         Strategi:

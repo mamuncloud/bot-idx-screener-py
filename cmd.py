@@ -70,6 +70,8 @@ class Command:
                     found = self.screener.is_breakout_20_days(df)
                 elif strategy == "bb_breakout_volume":
                     found = self.screener.is_bb_breakout_volume(df)
+                elif strategy == "before_rising_three_method_with_volume":
+                    found = self.screener.is_before_rising_three_method_with_volume(df)
                 
                 if found:
                     latest_close = df['Close'].iloc[-1]

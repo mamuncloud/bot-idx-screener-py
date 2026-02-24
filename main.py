@@ -12,7 +12,8 @@ if __name__ == "__main__":
           "rising_three",
           "trend_following",
           "breakout_20_days",
-          "bb_breakout_volume"
+          "bb_breakout_volume",
+          "before_rising_three_method_with_volume"
         ],
         required=True,
         help="Choose the screening strategy"

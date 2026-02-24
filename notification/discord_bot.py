@@ -13,8 +13,9 @@ class DiscordNotifier:
         "trend_following": os.getenv("WEBHOOK_TREND_FOLLOWING"),
         "macd_cross_up": os.getenv("WEBHOOK_MACD_CROSS"),
         "rising_three": os.getenv("WEBHOOK_RISING_THREE"),
+        "before_rising_three_method_with_volume": os.getenv("WEBHOOK_RISING_THREE"),
         "breakout_20_days": os.getenv("WEBHOOK_BREAKOUT_20_DAYS"),
-        "bb_breakout_volume": os.getenv("WEBHOOK_BB_BREAKOUT_VOLUME")
+        "bb_breakout_volume": os.getenv("WEBHOOK_BB_BREAKOUT_VOLUME"),
       }
 
     def send_notification(self, strategy, matches):
@@ -40,6 +41,9 @@ class DiscordNotifier:
           icon = "⚡"
       elif strategy == "bb_breakout_volume":
           color = 16711680 # Red
+          icon = "⚡"
+      elif strategy == "before_rising_three_method_with_volume":
+          color = 16776960 # Yellow
           icon = "⚡"
       else:
           color = 15158332 # Default Gold

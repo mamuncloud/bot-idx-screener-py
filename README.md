@@ -1,27 +1,74 @@
 
-# IDX Stock Screener with Discord Notification 🚀
+# 🚀 IDX Stock Screener with Discord Notification
 
-Bot screener saham otomatis untuk Bursa Efek Indonesia (IDX) yang menggunakan analisis teknikal (MACD & Candlestick Pattern) dan mengirimkan notifikasi secara real-time ke channel Discord yang berbeda berdasarkan strategi.
+Bot screener saham otomatis untuk Bursa Efek Indonesia (IDX) yang menggunakan berbagai strategi analisis teknikal. Hasil screening dikirimkan secara real-time ke channel Discord yang berbeda berdasarkan strategi, lengkap dengan detail harga, volume, value transaksi, dan link chart.
 
 ## ✨ Fitur Utama
-- **Multi-Strategy**: Mendukung `MACD Golden Cross` dengan Volume Spike dan pattern `Rising Three Methods`.
-- **Multi-Channel Discord**: Notifikasi dikirim ke channel spesifik sesuai strategi yang dipilih.
-- **Batch Processing**: Menggunakan download data massal via `yfinance` untuk performa maksimal.
-- **Security**: Integrasi file `.env` untuk menyembunyikan Webhook URL dan path sensitif.
-- **Flexible Ticker**: Mampu membaca format CSV list ticker baik dalam bentuk kolom maupun baris.
+- **Multi-Strategy**: Mendukung 5 strategi teknikal (MACD, Bollinger Bands, Breakout 20 Hari, Trend Following, dan Rising Three).
+- **Rich Notifications**: Notifikasi Discord yang informatif mencakup:
+    - 💰 Harga Close terakhir.
+    - 📊 Volume & Value transaksi (Turnover) yang sudah diformat (T/B/M).
+    - 📈 Link langsung ke Chartbit Stockbit untuk setiap emiten.
+- **Multi-Channel Discord**: Setiap strategi dapat dikirim ke Webhook yang berbeda.
+- **Automated**: Terintegrasi dengan GitHub Actions untuk screening otomatis sesuai jam bursa.
+- **Batch Processing**: Mengambil data massal via `yfinance` untuk kecepatan maksimal.
 
+## 🛠️ Strategi Screening
+Berikut adalah daftar strategi yang diimplementasikan di `screener/screener.py`:
 
-## Direktori
+| Strategi | Deskripsi |
+|----------|-----------|
+| `macd_cross_up` | MACD Golden Cross dengan konfirmasi Volume Spike (2x rata-rata). |
+| `rising_three` | Pola candlestick trend continuation *Rising Three Methods*. |
+| `trend_following` | MA bertumpuk (MA20 > MA50 > MA100) dengan Volume Spike & Liquiditas. |
+| `breakout_20_days` | Harga menembus High 20 hari terakhir dengan Volume Spike. |
+| `bb_breakout_volume` | Harga menembus Upper Bollinger Band dengan lonjakan volume & Likuiditas. |
 
+*Filter Likuiditas: Secara default menyaring saham dengan turnover > 5 Miliar.*
+
+## 🚀 Cara Penggunaan
+
+### 1. Setup Environment
+Buat file `.env` di root folder dan tambahkan Webhook URL untuk masing-masing strategi:
+```env
+WEBHOOK_TREND_FOLLOWING=...
+WEBHOOK_MACD_CROSS=...
+WEBHOOK_RISING_THREE=...
+WEBHOOK_BREAKOUT_20_DAYS=...
+WEBHOOK_BB_BREAKOUT_VOLUME=...
+```
+
+### 2. Instalasi
+```bash
+pip install -r requirements.txt
+```
+
+### 3. Menjalankan Manual
+```bash
+# Contoh menjalankan strategi breakout 20 hari
+python main.py --strategy breakout_20_days
+```
+
+## 📂 Struktur Proyek
 ```
 .
-├── README.md
-├── cmd.py
-├── main.py
-├── notification
-│   └── discord_bot.py
-├── requirements.txt
-├── screener
-│   └── screener.py
-└── ticker.csv
+├── .github/workflows/    # File konfigurasi automasi (GitHub Actions)
+├── notification/
+│   └── discord_bot.py    # Logika pengiriman notifikasi Discord
+├── screener/
+│   └── screener.py       # Algoritma strategi screening
+├── cmd.py                # Logic utama pemrosesan data
+├── main.py               # Entry point program
+├── ticker.csv            # Daftar ticker IDX
+└── requirements.txt      # Library yang dibutuhkan
 ```
+
+## 🤖 Otomasi (GitHub Actions)
+Screener berjalan otomatis setiap hari bursa (Senin-Jumat) pada:
+- 10:00 WIB (Opening Sesi 1)
+- 13:00 WIB (Opening Sesi 2)
+- 14:00 WIB (Running Trade)
+- 15:00 WIB (Closing Phase)
+
+---
+*Disclaimer: Gunakan bot ini sebagai alat bantu. Selalu lakukan analisis fundamental dan teknikal mandiri sebelum mengambil keputusan investasi.*

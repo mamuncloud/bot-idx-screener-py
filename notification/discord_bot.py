@@ -64,7 +64,7 @@ class DiscordNotifier:
                 return f"{n:,.0f}"
 
         ticker_lines = [
-            f"**{m['symbol']}** | Price: `{m['price']:,.0f}` | Vol: `{format_number(m['volume'])}` | Val: `{format_number(m['value'])}`"
+            f"**{m['symbol']}** | Price: `{m['price']:,.0f}` | Vol: `{format_number(m['volume'])}` | Val: `{format_number(m['value'])}` | [sb](https://stockbit.com/symbol/{m['symbol'].replace('.JK', '')}/chartbit)"
             for m in matches
         ]
 

@@ -1,5 +1,3 @@
-import pandas as pd
-import re
 import yfinance as yf
 
 class StockScreener:
@@ -167,6 +165,7 @@ class StockScreener:
         0. Close sebelumnya < Upper Bollinger Band (Belum breakout)
         1. Close sekarang > Upper Bollinger Band (Breakout)
         2. Volume sekarang > 2x Rata-rata Volume 20 hari
+        3. Turnover > 5 Miliar
       """
       if len(df) < 20: return False
         
@@ -183,5 +182,8 @@ class StockScreener:
       # 3. Cek Volume Spike
       vol_avg = df['Volume'].rolling(window=20).mean().iloc[-1]
       vol_spike = df['Volume'].iloc[-1] > (vol_avg * 2)
+
+      turnover = df['Close'].iloc[-1] * df['Volume'].iloc[-1]
+      is_liquid = turnover > 5_000_000_000
         
-      return prev_breakout and curr_breakout and vol_spike
+      return prev_breakout and curr_breakout and vol_spike and is_liquid

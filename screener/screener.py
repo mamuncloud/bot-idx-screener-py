@@ -20,6 +20,7 @@ class StockScreener:
         
         # 1. Ambil data hari ini
         latest = df.iloc[-1]
+        previous = df.iloc[-2]
 
         # 2. Cari harga tertinggi dari 20 hari ke belakang (tidak termasuk hari ini)
         # .iloc[-21:-1] mengambil index ke -21 sampai -2 (total 20 bar sebelum hari ini)
@@ -37,12 +38,14 @@ class StockScreener:
         # Tambahan: Pastikan candle hari ini bullish (Close > Open)
         is_bullish = latest['Close'] > latest['Open'] * 1.04
 
+        is_higher_than_yesterday = latest['Close'] > previous['Close']
+
         # 5. Kondisi Turnover > 3 Miliar (Price * Volume)
         # Di Bursa Efek Indonesia, Volume di yfinance biasanya dalam lembar saham
         turnover = latest['Close'] * latest['Volume']
         is_liquid = turnover > 5_000_000_000
         
-        return is_breakout and volume_spike and is_bullish and is_liquid
+        return is_breakout and volume_spike and is_bullish and is_liquid and is_higher_than_yesterday
       except Exception as e:
         print(f"Error pada screening breakout: {e}")
         return False

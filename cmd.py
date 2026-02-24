@@ -58,6 +58,10 @@ class Command:
                 
                 if df.empty or len(df) < 5: 
                     continue
+
+                latest_close = df['Close'].iloc[-1]
+                latest_volume = df['Volume'].iloc[-1]
+                latest_value = latest_close * latest_volume
                 
                 found = False
                 if strategy == "macd_cross_up":
@@ -74,11 +78,10 @@ class Command:
                     found = self.screener.is_before_rising_three_method_with_volume(df)
                 
                 if found:
-                    latest_close = df['Close'].iloc[-1]
-                    latest_volume = df['Volume'].iloc[-1]
-                    latest_value = latest_close * latest_volume
-                    
-                    print(f" [MATCH] {symbol} | Price: {latest_close:,.0f} | Vol: {latest_volume:,.0f} | Val: {latest_value:,.0f}")
+                    log = f" [MATCH] {symbol} | Price: {latest_close:,.0f}\t\t"
+                    log += f"| Vol: {latest_volume:,.0f}\t\t"
+                    log += f"| Val: {latest_value:,.0f}\t\t"
+                    print(log)
                     
                     matches.append({
                         "symbol": symbol,

@@ -161,3 +161,27 @@ class StockScreener:
         and breakout
       )
 
+    def is_bb_breakout_volume(self, df):
+      """
+        Strategi:
+        0. Close sebelumnya < Upper Bollinger Band (Belum breakout)
+        1. Close sekarang > Upper Bollinger Band (Breakout)
+        2. Volume sekarang > 2x Rata-rata Volume 20 hari
+      """
+      if len(df) < 20: return False
+        
+      # 1. Hitung Bollinger Bands (Standar deviasi 2, Periode 20)
+      ma_20 = df['Close'].rolling(window=20).mean()
+      std_20 = df['Close'].rolling(window=20).std()
+      upper_bb = ma_20 + (2 * std_20)
+      
+      # 2. Cek Kondisi Breakout (Current vs Previous)
+      # Indeks -1 adalah data terbaru, -2 adalah data sebelumnya
+      prev_breakout = df['Close'].iloc[-2] < upper_bb.iloc[-2]
+      curr_breakout = df['Close'].iloc[-1] > upper_bb.iloc[-1]
+        
+      # 3. Cek Volume Spike
+      vol_avg = df['Volume'].rolling(window=20).mean().iloc[-1]
+      vol_spike = df['Volume'].iloc[-1] > (vol_avg * 2)
+        
+      return prev_breakout and curr_breakout and vol_spike

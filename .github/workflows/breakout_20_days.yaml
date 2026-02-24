@@ -19,7 +19,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.12'
+          python-version: "3.12"
 
       - name: Install Dependencies
         run: |
@@ -27,4 +27,5 @@ jobs:
           pip install -r requirements.txt
 
       - name: Run Breakout 20 Days Screener
-        run: python main.py --strategy breakout_20_days
+        run: python main.py --strategy breakout_20_days &&
+          python main.py --strategy bb_breakout_volume

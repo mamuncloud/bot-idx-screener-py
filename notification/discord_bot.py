@@ -1,6 +1,7 @@
 import requests
 import json
 from datetime import datetime
+import pytz
 import os
 from dotenv import load_dotenv
 
@@ -12,14 +13,16 @@ class DiscordNotifier:
         "trend_following": os.getenv("WEBHOOK_TREND_FOLLOWING"),
         "macd_cross_up": os.getenv("WEBHOOK_MACD_CROSS"),
         "rising_three": os.getenv("WEBHOOK_RISING_THREE"),
-        "breakout_20_days": os.getenv("WEBHOOK_BREAKOUT_20_DAYS")
+        "breakout_20_days": os.getenv("WEBHOOK_BREAKOUT_20_DAYS"),
+        "bb_breakout_volume": os.getenv("WEBHOOK_BB_BREAKOUT_VOLUME")
       }
 
     def send_notification(self, strategy, matches):
       webhook_url = self.webhook_config.get(strategy)
       if not webhook_url: return
 
-      now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+      wib = pytz.timezone('Asia/Jakarta')
+      now = datetime.now(wib).strftime("%Y-%m-%d %H:%M:%S")
       url_repo = "https://github.com/mamuncloud/bot-idx-screener-py"
         
       # Tentukan warna (Decimal) & Icon berdasarkan strategi
@@ -34,6 +37,9 @@ class DiscordNotifier:
           icon = "🚀"
       elif strategy == "breakout_20_days":
           color = 10181046 # Purple
+          icon = "⚡"
+      elif strategy == "bb_breakout_volume":
+          color = 16711680 # Red
           icon = "⚡"
       else:
           color = 15158332 # Default Gold

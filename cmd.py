@@ -68,6 +68,8 @@ class Command:
                     found = self.screener.is_trend_following(df)
                 elif strategy == "breakout_20_days":
                     found = self.screener.is_breakout_20_days(df)
+                elif strategy == "bb_breakout_volume":
+                    found = self.screener.is_bb_breakout_volume(df)
                 
                 if found:
                     latest_close = df['Close'].iloc[-1]

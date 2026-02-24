@@ -11,7 +11,8 @@ if __name__ == "__main__":
           "macd_cross_up",
           "rising_three",
           "trend_following",
-          "breakout_20_days"
+          "breakout_20_days",
+          "bb_breakout_volume"
         ],
         required=True,
         help="Choose the screening strategy"

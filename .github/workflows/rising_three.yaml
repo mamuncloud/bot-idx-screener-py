@@ -17,7 +17,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.12'
+          python-version: "3.12"
 
       - name: Install Dependencies
         run: |
@@ -25,4 +25,6 @@ jobs:
           pip install -r requirements.txt
 
       - name: Run Rising Three Method Screener
-        run: python main.py --strategy rising_three
+        run: |
+          python main.py --strategy rising_three
+          python main.py --strategy before_rising_three_method_with_volume

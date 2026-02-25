@@ -95,6 +95,7 @@ class Command:
                 continue
 
         # --- Bagian Pengiriman Notifikasi ---
+        print("\n")
         if self.notifier:
             if matches:
                 matches.sort(key=lambda x: x['value'], reverse=True)

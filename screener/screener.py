@@ -164,6 +164,7 @@ class StockScreener:
       2. C2, C3, C4 berada di dalam range High/Low C1
       3. C2 Bearish, C3 Bearish, C4 Bearish (Color Red)
       4. Volume C2, C3, C4 menunjukkan tren menurun (Dying Volume)
+      5. Harga > 60 dan < 5000
       """
       if len(df) < 4: return False
       
@@ -191,10 +192,16 @@ class StockScreener:
         and c.iloc[3]['Close'] < c.iloc[3]['Open']
       )
 
+      is_valid_price = c.iloc[0]['Close'] > 60 and c.iloc[0]['Close'] < 5000
+      turnover = c.iloc[0]['Close'] * c.iloc[0]['Volume']
+      is_liquid = turnover > 5_000_000_000
+
       return (
           c1_bullish 
           and middle_stayed_inside 
           and middle_is_bearish
+          and is_valid_price
+          and is_liquid
       )
     
     def is_bb_breakout_volume(self, df):

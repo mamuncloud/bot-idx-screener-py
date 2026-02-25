@@ -54,7 +54,7 @@ class DiscordNotifier:
           "title": f"{icon} IDX Screener: {strategy.upper()}",
           "description": "Tidak ada saham yang memenuhi kriteria saat ini.",
           "color": 15158332, # Kuning/Oranye jika kosong
-          "footer": {"text": f"Executed at {now}"}
+          "footer": {"text": f"Executed at {now} • Do Your Own Research!"}
         }
       else:
         def format_number(n):
@@ -92,11 +92,16 @@ class DiscordNotifier:
             {
               "name": "🛠️ System Info",
               "value": f"[GitHub Repository]({url_repo})",
-              "inline": False
+              "inline": True
+            },
+            {
+              "name": "⚠️ Disclaimer",
+              "value": "Do Your Own Research! \n*Hanya screening, tidak menjanjikan keuntungan.*\n\n💡 **Tips:** Cari emiten yang ekor/wick atasnya kecil dan tidak banyak drama",
+              "inline": True
             }
           ],
           "footer": {
-            "text": f"IDX Trading Bot • {now}",
+            "text": f"IDX Trading Bot • {now} • Do Your Own Research!",
             "icon_url": "https://cdn-icons-png.flaticon.com/512/2502/2502160.png"
           }
         }

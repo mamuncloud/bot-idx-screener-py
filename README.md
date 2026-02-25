@@ -4,7 +4,7 @@
 Bot screener saham otomatis untuk Bursa Efek Indonesia (IDX) yang menggunakan berbagai strategi analisis teknikal. Hasil screening dikirimkan secara real-time ke channel Discord yang berbeda berdasarkan strategi, lengkap dengan detail harga, volume, value transaksi, dan link chart.
 
 ## ✨ Fitur Utama
-- **Multi-Strategy**: Mendukung 5 strategi teknikal (MACD, Bollinger Bands, Breakout 20 Hari, Trend Following, dan Rising Three).
+- **Multi-Strategy**: Mendukung 6 strategi teknikal (MACD, Bollinger Bands, Breakout 20 Hari, Trend Following, Rising Three, dan Before Rising Three).
 - **Rich Notifications**: Notifikasi Discord yang informatif mencakup:
     - 💰 Harga Close terakhir.
     - 📊 Volume & Value transaksi (Turnover) yang sudah diformat (T/B/M).
@@ -19,8 +19,9 @@ Berikut adalah daftar strategi yang diimplementasikan di `screener/screener.py`:
 | Strategi | Deskripsi |
 |----------|-----------|
 | `macd_cross_up` | MACD Golden Cross dengan konfirmasi Volume Spike (2x rata-rata). |
-| `rising_three` | Pola candlestick trend continuation *Rising Three Methods*. |
-| `trend_following` | MA bertumpuk (MA20 > MA50 > MA100) dengan Volume Spike & Liquiditas. |
+| `rising_three` | Pola candlestick trend continuation *Rising Three Methods* (C5 Breakout). |
+| `before_rising_three_method_with_volume` | **Antisipasi** pola Rising Three (C1 Bullish, C2-C4 Bearish di dalam range C1) dengan "Dying Volume". |
+| `trend_following` | Moving Average bertumpuk (MA20 > MA50 > MA100) dengan Volume Spike. |
 | `breakout_20_days` | Harga menembus High 20 hari terakhir dengan Volume Spike. |
 | `bb_breakout_volume` | Harga menembus Upper Bollinger Band dengan lonjakan volume & Likuiditas. |
 
@@ -37,6 +38,7 @@ WEBHOOK_RISING_THREE=...
 WEBHOOK_BREAKOUT_20_DAYS=...
 WEBHOOK_BB_BREAKOUT_VOLUME=...
 ```
+*(Catatan: `before_rising_three_method_with_volume` menggunakan webhook yang sama dengan `rising_three`)*
 
 ### 2. Instalasi
 ```bash
@@ -64,11 +66,12 @@ python main.py --strategy breakout_20_days
 ```
 
 ## 🤖 Otomasi (GitHub Actions)
-Screener berjalan otomatis setiap hari bursa (Senin-Jumat) pada:
-- 10:00 WIB (Opening Sesi 1)
-- 13:00 WIB (Opening Sesi 2)
-- 14:00 WIB (Running Trade)
-- 15:00 WIB (Closing Phase)
+Screener berjalan otomatis setiap hari bursa (Senin-Jumat) dengan jadwal:
+
+1.  **Breakout 20 Days & BB Breakout**: 
+    - 10:00, 13:00, 14:00, 15:00 WIB
+2.  **MACD, Trend Following, & Rising Three**:
+    - 11:00, 15:00 WIB
 
 ---
 *Disclaimer: Gunakan bot ini sebagai alat bantu. Selalu lakukan analisis fundamental dan teknikal mandiri sebelum mengambil keputusan investasi.*

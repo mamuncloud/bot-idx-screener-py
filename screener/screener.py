@@ -143,14 +143,14 @@ class StockScreener:
         
       # 2. Validasi Middle Candles (Stay inside, Bearish & Volume weakening)
       middle_stayed_inside = (
-        c.iloc[1]['Close'] < c1_high 
-        and c.iloc[1]['Close'] > c1_low
+        c.iloc[1]['High'] < c1_high 
+        and c.iloc[1]['Low'] > c1_low
 
-        and c.iloc[2]['Close'] < c1_high 
-        and c.iloc[2]['Close'] > c1_low
+        and c.iloc[2]['High'] < c1_high 
+        and c.iloc[2]['Low'] > c1_low
 
-        and c.iloc[3]['Close'] < c1_high 
-        and c.iloc[3]['Close'] > c1_low
+        and c.iloc[3]['High'] < c1_high 
+        and c.iloc[3]['Low'] > c1_low
       )
       middle_is_bearish = (
         c.iloc[1]['Close'] < c.iloc[1]['Open']

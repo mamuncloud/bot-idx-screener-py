@@ -141,11 +141,22 @@ class StockScreener:
       c1_high = c.iloc[0]['High']
       c1_low = c.iloc[0]['Low']
         
-      middle_stayed_inside = True
-      for i in range(1, 4):
-        if c.iloc[i]['High'] > c1_high or c.iloc[i]['Low'] < c1_low:
-          middle_stayed_inside = False
-          break
+      # 2. Validasi Middle Candles (Stay inside, Bearish & Volume weakening)
+      middle_stayed_inside = (
+        c.iloc[1]['Close'] < c1_high 
+        and c.iloc[1]['Close'] > c1_low
+
+        and c.iloc[2]['Close'] < c1_high 
+        and c.iloc[2]['Close'] > c1_low
+
+        and c.iloc[3]['Close'] < c1_high 
+        and c.iloc[3]['Close'] > c1_low
+      )
+      middle_is_bearish = (
+        c.iloc[1]['Close'] < c.iloc[1]['Open']
+        and c.iloc[2]['Close'] < c.iloc[2]['Open']
+        and c.iloc[3]['Close'] < c.iloc[3]['Open']
+      )
         
       c5_bullish = c.iloc[4]['Close'] > c.iloc[4]['Open'] * 1.04
       breakout = c.iloc[4]['Close'] > c1_high
@@ -153,6 +164,7 @@ class StockScreener:
       return (
         c1_bullish 
         and middle_stayed_inside 
+        and middle_is_bearish
         and c5_bullish 
         and breakout
       )

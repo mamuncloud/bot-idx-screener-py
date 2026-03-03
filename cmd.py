@@ -99,6 +99,7 @@ class Command:
         if self.notifier:
             if matches:
                 matches.sort(key=lambda x: x['value'], reverse=True)
+                matches = matches[:3]
             self.notifier.send_notification(strategy, matches)
         
 

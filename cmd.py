@@ -49,7 +49,7 @@ class Command:
         
         all_data = yf.download(
             self.symbols, 
-            period="200d", 
+            period="300d", 
             interval="1d", 
             group_by='ticker', 
             progress=True

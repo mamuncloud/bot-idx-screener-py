@@ -11,15 +11,17 @@ class BbBreakout:
         3. Turnover > 5 Miliar
         4. Harga > 60 dan < 5000
         5. Volume > Previous Volume
+        6. MA20 > MA50
         """
         try:
-            if len(df) < 20: return False
+            if len(df) < 50: return False
             
             # Avoid modifying original df
             df = df.copy()
             
             # 1. Hitung Bollinger Bands (Standar deviasi 2, Periode 20)
             ma_20 = df['Close'].rolling(window=20).mean()
+            ma_50 = df['Close'].rolling(window=50).mean()
             std_20 = df['Close'].rolling(window=20).std()
             upper_bb = ma_20 + (2 * std_20)
             
@@ -47,6 +49,7 @@ class BbBreakout:
                 and vol_spike 
                 and is_liquid
                 and is_valid_price
+                and ma_20.iloc[-1] > ma_50.iloc[-1]
             )
         except Exception as e:
             return False

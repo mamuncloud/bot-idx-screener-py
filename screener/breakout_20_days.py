@@ -9,9 +9,10 @@ class Breakout20Days:
         2. Volume: Volume hari ini > 1.5x rata-rata volume 20 hari
         3. Momentum: Close > Open * 1.04 (Candle bullish naik minimal 4% hari ini)
         4. Liquidity: Turnover > 5 Miliar
+        5. MA20 > MA50
         """
         try:
-            if len(df) < 21:  # Butuh minimal 21 data untuk membandingkan dengan 20 hari sebelumnya
+            if len(df) < 60:  # Butuh minimal 60 data untuk membandingkan dengan 20 hari sebelumnya
                 return False
             
             # 1. Ambil data hari ini
@@ -31,6 +32,11 @@ class Breakout20Days:
             # Harga tutup harus menembus titik tertinggi 20 hari
             is_breakout = latest['Close'] > max_high_20d
 
+            # 5. MA20 > MA50
+            ma_20 = df['Close'].rolling(window=20).mean().iloc[-1]
+            ma_50 = df['Close'].rolling(window=50).mean().iloc[-1]
+            ma_condition = ma_20 > ma_50
+
             # Tambahan: Pastikan candle hari ini bullish (Close > Open)
             is_bullish = latest['Close'] > latest['Open'] * 1.04
 
@@ -40,7 +46,14 @@ class Breakout20Days:
             turnover = latest['Close'] * latest['Volume']
             is_liquid = turnover > 5_000_000_000
             
-            return is_breakout and volume_spike and is_bullish and is_liquid and is_higher_than_yesterday
+            return (
+                is_breakout 
+                and volume_spike 
+                and is_bullish 
+                and is_liquid
+                and is_higher_than_yesterday 
+                and ma_condition
+            )
         except Exception as e:
             print(f"Error pada screening breakout: {e}")
             return False

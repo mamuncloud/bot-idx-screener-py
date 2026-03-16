@@ -1,16 +1,26 @@
 import yfinance as yf
 import re
-import pandas as pd
 
-from screener.screener import StockScreener
+from screener.breakout_20_days import Breakout20Days
+from screener.trend_following import TrendFollowing
+from screener.macd_cross import MacdCross
+from screener.rising_three import RisingThree
+from screener.bb_breakout import BbBreakout
+
 from notification.discord_bot import DiscordNotifier
 
 class Command:
     def __init__(self, ticker_path="ticker.csv"):
         self.ticker_path = ticker_path
         self.symbols = []
-        self.screener = StockScreener()
         self.notifier = DiscordNotifier()
+        
+        # Initialize strategy classes
+        self.breakout_20_days = Breakout20Days()
+        self.trend_following = TrendFollowing()
+        self.macd_cross = MacdCross()
+        self.rising_three = RisingThree()
+        self.bb_breakout = BbBreakout()
         
         try:
             with open(self.ticker_path, 'r') as f:
@@ -65,17 +75,17 @@ class Command:
                 
                 found = False
                 if strategy == "macd_cross_up":
-                    found = self.screener.is_macd_golden_cross_up(df)
+                    found = self.macd_cross.screen(df)
                 elif strategy == "rising_three":
-                    found = self.screener.is_rising_three_method(df)
+                    found = self.rising_three.screen(df)
                 elif strategy == "trend_following":
-                    found = self.screener.is_trend_following(df)
+                    found = self.trend_following.screen(df)
                 elif strategy == "breakout_20_days":
-                    found = self.screener.is_breakout_20_days(df)
+                    found = self.breakout_20_days.screen(df)
                 elif strategy == "bb_breakout_volume":
-                    found = self.screener.is_bb_breakout_volume(df)
+                    found = self.bb_breakout.screen(df)
                 elif strategy == "before_rising_three_method_with_volume":
-                    found = self.screener.is_before_rising_three_method_with_volume(df)
+                    found = self.rising_three.screen_anticipation(df)
                 
                 if found:
                     log = f" [MATCH] {symbol} | Price: {latest_close:,.0f}\t\t"
